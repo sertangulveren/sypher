@@ -38,3 +38,17 @@ func Generate() {
 	}
 	fmt.Println(shared.Done)
 }
+// Print credential as plain
+func Print() {
+	s := sypher.Sypher{}
+	if len(shared.CmdArgs()) > 0 {
+		s.Name = shared.CmdArgs()[0]
+	}
+
+	s.Prepare()
+	//fmt.Println(s.Data)
+	for k, v := range s.Data {
+		fmt.Printf("%s=%s\n", k, string(v))
+	}
+	fmt.Println(shared.Done)
+}
