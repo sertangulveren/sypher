@@ -92,4 +92,9 @@ func Edit() {
 	err = cmd.Wait()
 	utils.PanicWithError(err)
 
+	newData, err := ioutil.ReadFile(tempFile.Name())
+	utils.PanicWithError(err)
+	s.Write(newData)
+
+	fmt.Println(shared.ChangesSavedSuccessfully)
 }
