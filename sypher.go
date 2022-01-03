@@ -15,6 +15,10 @@ type Sypher struct {
 	Ready bool
 }
 
+func NewSypher() *Sypher {
+	return &Sypher{Name: shared.DefaultName}
+}
+
 func (s *Sypher) RootFilePath() string {
 	return filepath.Join(shared.WorkingDir(), shared.ContentDir, s.Name)
 }

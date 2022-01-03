@@ -7,12 +7,23 @@ import (
 
 var Cred *Sypher
 
+type Config struct {
+	Name string
+	Key string
+}
+
 // Load to make ready to use sypher
-func Load(name string, key string)  {
-	Cred = &Sypher{
-		Name: name,
-		Key:  key,
+func Load(config ...Config) {
+	if len(config) == 0 {
+		Cred = NewSypher()
+	} else {
+		cfg := config[0]
+		Cred = &Sypher{
+			Name: cfg.Name,
+			Key:  cfg.Key,
+		}
 	}
+
 	Cred.Prepare()
 }
 
