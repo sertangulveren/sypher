@@ -38,6 +38,7 @@ func Generate() {
 	}
 	fmt.Println(shared.Done)
 }
+
 // Print credential as plain
 func Print() {
 	s := sypher.Sypher{}
@@ -64,7 +65,7 @@ func Edit() {
 	currentData := s.Read()
 
 	// Create a file to temporarily write decrypted content
-	tempFile, err := ioutil.TempFile(os.TempDir(), s.Name + ".*.env")
+	tempFile, err := ioutil.TempFile(os.TempDir(), s.Name+".*.env")
 	utils.ExitWithMessage(err, shared.CannotCreateTempFile)
 
 	defer os.Remove(tempFile.Name())
@@ -100,14 +101,14 @@ func Edit() {
 }
 
 // GenerateGitIgnore generates or modifies .gitignore file.
-func GenerateGitIgnore()  {
+func GenerateGitIgnore() {
 	// prepare file path
 	path := filepath.Join(shared.WorkingDir(), ".gitignore")
 	content := shared.GitIgnoreTemplate
 
 	// if file exists add new line
 	// Todo: could be smarter 🤓
-	if _, err := os.Stat(path); err == nil{
+	if _, err := os.Stat(path); err == nil {
 		content = "\n" + content
 	}
 

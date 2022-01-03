@@ -7,8 +7,6 @@ import (
 	"os"
 )
 
-
-
 func main() {
 	flag.Usage = shared.Help
 	flag.Parse()

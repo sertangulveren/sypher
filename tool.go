@@ -9,7 +9,7 @@ var Cred *Sypher
 
 type Config struct {
 	Name string
-	Key string
+	Key  string
 }
 
 // Load to make ready to use sypher

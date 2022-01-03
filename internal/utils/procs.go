@@ -25,7 +25,7 @@ func DecodeBase64(src []byte) []byte {
 	return data[:n]
 }
 
-func Encrypt(key string, src []byte) []byte  {
+func Encrypt(key string, src []byte) []byte {
 	cBlock, err := aes.NewCipher([]byte(key))
 	PanicWithError(err)
 

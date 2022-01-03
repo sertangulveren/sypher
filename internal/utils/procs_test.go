@@ -6,9 +6,9 @@ import (
 )
 
 var (
-	contentBase64 = []byte("SGVsbG8gV29ybGQ")
-	contentPlain = []byte("Hello World")
-	testData = []byte("0")
+	contentBase64     = []byte("SGVsbG8gV29ybGQ")
+	contentPlain      = []byte("Hello World")
+	testData          = []byte("0")
 	testEncryptedData = "bac57c92c77132f295e7485ce0b6dc3e04e8e7b7b3a19fb7063ed21a72"
 )
 

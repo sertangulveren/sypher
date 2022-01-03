@@ -6,7 +6,7 @@ import (
 	"runtime/debug"
 )
 
-func ExitWithMessage(err error, msg string)  {
+func ExitWithMessage(err error, msg string) {
 	if err == nil {
 		return
 	}
@@ -19,7 +19,7 @@ func ExitWithMessage(err error, msg string)  {
 
 	os.Exit(1)
 }
-func PanicWithError(err error)  {
+func PanicWithError(err error) {
 	if err != nil {
 		panic(err)
 	}

@@ -9,9 +9,9 @@ import (
 )
 
 type Sypher struct {
-	Name string
-	Key  string
-	Data map[string][]byte
+	Name  string
+	Key   string
+	Data  map[string][]byte
 	Ready bool
 }
 
@@ -39,7 +39,6 @@ func (s *Sypher) ReadKeyFile() {
 func (s *Sypher) Read() []byte {
 	encData, err := os.ReadFile(s.FileName())
 	utils.ExitWithMessage(err, shared.CannotReadEncryptedFile)
-
 
 	bData := utils.DecodeBase64(encData)
 	data := utils.Decrypt(s.Key, bData)

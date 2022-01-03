@@ -27,7 +27,7 @@ func TestShouldNotPanic(t *testing.T) {
 
 func TestShouldExitWithMessage(t *testing.T) {
 	if os.Getenv("EXIT_TEST") == "true" {
-		ExitWithMessage(errors.New("nice error"),"im running on subprocess")
+		ExitWithMessage(errors.New("nice error"), "im running on subprocess")
 		return
 	}
 
@@ -42,5 +42,5 @@ func TestShouldExitWithMessage(t *testing.T) {
 }
 
 func TestShouldNotExit(t *testing.T) {
-	ExitWithMessage(nil,"")
+	ExitWithMessage(nil, "")
 }
