@@ -98,3 +98,29 @@ func Edit() {
 
 	fmt.Println(shared.ChangesSavedSuccessfully)
 }
+
+// GenerateGitIgnore generates or modifies .gitignore file.
+func GenerateGitIgnore()  {
+	// prepare file path
+	path := filepath.Join(shared.WorkingDir(), ".gitignore")
+	content := shared.GitIgnoreTemplate
+
+	// if file exists add new line
+	// Todo: could be smarter 🤓
+	if _, err := os.Stat(path); err == nil{
+		content = "\n" + content
+	}
+
+	ignoreFile, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, os.ModePerm)
+	utils.PanicWithError(err)
+
+	defer func() {
+		err = ignoreFile.Close()
+		utils.PanicWithError(err)
+	}()
+
+	_, err = ignoreFile.Write([]byte(content))
+	utils.PanicWithError(err)
+
+	fmt.Println(shared.Done)
+}
