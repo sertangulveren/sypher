@@ -63,3 +63,17 @@ func (s *Sypher) WriteKey() {
 	utils.PanicWithError(err)
 }
 
+func (s *Sypher) Prepare() {
+	if s.Name == "" {
+		s.Name = shared.DefaultName
+	}
+	if s.Key == "" {
+		if s.Key = os.Getenv("SYPHER_MASTER_KEY"); s.Key == "" {
+			s.ReadKeyFile()
+		}
+	}
+
+	// read data and set sypher data
+	s.Read()
+	s.Ready = true
+}
