@@ -52,3 +52,39 @@ func Print() {
 	}
 	fmt.Println(shared.Done)
 }
+
+// Edit credential in editor
+func Edit() {
+	s := sypher.Sypher{}
+	if len(shared.CmdArgs()) > 0 {
+		s.Name = shared.CmdArgs()[0]
+	}
+
+	s.Prepare()
+	currentData := s.Read()
+
+	// Create a file to temporarily write decrypted content
+	tempFile, err := ioutil.TempFile(os.TempDir(), s.Name + ".*.env")
+	utils.ExitWithMessage(err, shared.CannotCreateTempFile)
+
+	defer os.Remove(tempFile.Name())
+	defer tempFile.Close()
+
+	// Write decrypted content
+	_, err = tempFile.Write(currentData)
+	utils.ExitWithMessage(err, shared.CannotWriteToTempFile)
+
+	// Get editor
+	editorApp, err := exec.LookPath(shared.GetEditor())
+	utils.PanicWithError(err)
+
+	// Generate commander to open tempfile in editor
+	cmd := exec.Command(editorApp, tempFile.Name())
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	// Open editor
+	err = cmd.Start()
+
+}
