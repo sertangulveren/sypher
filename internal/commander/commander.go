@@ -86,5 +86,10 @@ func Edit() {
 
 	// Open editor
 	err = cmd.Start()
+	utils.PanicWithError(err)
+
+	// Wait editor
+	err = cmd.Wait()
+	utils.PanicWithError(err)
 
 }
