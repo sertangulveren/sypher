@@ -2,11 +2,16 @@ package sypher
 
 import (
 	"bytes"
+	"embed"
+	"fmt"
 	"github.com/sertangulveren/sypher/internal/shared"
 	"github.com/sertangulveren/sypher/internal/utils"
 	"os"
 	"path/filepath"
 )
+
+//go:embed sypher/*
+var encryeptedCredentials embed.FS
 
 type Sypher struct {
 	Name  string
@@ -27,6 +32,10 @@ func (s *Sypher) FileName() string {
 	return s.RootFilePath() + ".enc"
 }
 
+func (s *Sypher) EmbedPath() string {
+	return s.Name + ".enc"
+}
+
 func (s *Sypher) KeyFileName() string {
 	return s.RootFilePath() + ".key"
 }
@@ -36,9 +45,24 @@ func (s *Sypher) ReadKeyFile() {
 	utils.ExitWithMessage(err, shared.CannotReadKeyFile)
 	s.Key = string(keyData)
 }
-func (s *Sypher) Read() []byte {
+
+func (s *Sypher) readEncryptedContent() []byte  {
 	encData, err := os.ReadFile(s.FileName())
+	if err == nil {
+		fmt.Println("sypher loaded the content from encrypted file")
+		return encData
+	}
+
+	encData, err = encryeptedCredentials.ReadFile(s.EmbedPath())
+	if err == nil {
+		fmt.Println("sypher loaded the content from embedded file")
+		return encData
+	}
 	utils.ExitWithMessage(err, shared.CannotReadEncryptedFile)
+	return nil
+}
+func (s *Sypher) Read() []byte {
+	encData := s.readEncryptedContent()
 
 	bData := utils.DecodeBase64(encData)
 	data := utils.Decrypt(s.Key, bData)
