@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 )
 
-//go:embed sypher/*
+//go:embed sypher/*.enc
 var encryeptedCredentials embed.FS
 
 type Sypher struct {
@@ -33,7 +33,7 @@ func (s *Sypher) FileName() string {
 }
 
 func (s *Sypher) EmbedPath() string {
-	return s.Name + ".enc"
+	return "sypher/" + s.Name + ".enc"
 }
 
 func (s *Sypher) KeyFileName() string {
