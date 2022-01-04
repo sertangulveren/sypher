@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"flag"
@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func main() {
+func Execute() {
 	flag.Usage = shared.Help
 	flag.Parse()
 
