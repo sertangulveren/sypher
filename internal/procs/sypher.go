@@ -1,7 +1,8 @@
-package sypher
+package procs
 
 import (
 	"bytes"
+	"embed"
 	"github.com/sertangulveren/sypher/internal/shared"
 	"github.com/sertangulveren/sypher/internal/utils"
 	"os"
@@ -15,7 +16,9 @@ type Sypher struct {
 	Ready bool
 }
 
-func newSypher() *Sypher {
+var FS *embed.FS
+
+func NewSypher() *Sypher {
 	return &Sypher{Name: shared.DefaultName}
 }
 
@@ -52,7 +55,7 @@ func (s *Sypher) readEncryptedContent() []byte  {
 		return encData
 	}
 
-	encData, err = fs.ReadFile(s.fsPath())
+	encData, err = FS.ReadFile(s.fsPath())
 	if err == nil {
 		// fmt.Println("sypher loaded the content from embedded file")
 		return encData

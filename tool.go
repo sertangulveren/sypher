@@ -3,10 +3,11 @@ package sypher
 import (
 	"embed"
 	"errors"
+	"github.com/sertangulveren/sypher/internal/procs"
 	"github.com/sertangulveren/sypher/internal/utils"
 )
 
-var Cred *Sypher
+var Cred *procs.Sypher
 
 var fs *embed.FS
 
@@ -22,10 +23,10 @@ func RegisterFS(projectFs *embed.FS) {
 // Load to make ready to use sypher
 func Load(config ...Config) {
 	if len(config) == 0 {
-		Cred = newSypher()
+		Cred = procs.NewSypher()
 	} else {
 		cfg := config[0]
-		Cred = &Sypher{
+		Cred = &procs.Sypher{
 			Name: cfg.Name,
 			Key:  cfg.Key,
 		}

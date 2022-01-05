@@ -2,7 +2,7 @@ package commander
 
 import (
 	"fmt"
-	"github.com/sertangulveren/sypher"
+	"github.com/sertangulveren/sypher/internal/procs"
 	"github.com/sertangulveren/sypher/internal/shared"
 	"github.com/sertangulveren/sypher/internal/utils"
 	"io/ioutil"
@@ -24,7 +24,7 @@ func Generate() {
 
 	// create credential for each pieces
 	for _, item := range pieces {
-		s := sypher.Sypher{
+		s := procs.Sypher{
 			Name: item,
 			Key:  utils.GenerateKey(),
 		}
@@ -34,7 +34,7 @@ func Generate() {
 		}
 		s.Write([]byte(shared.DefaultContent))
 		s.WriteKey()
-		sypher.WriteEmbedPort()
+		procs.WriteEmbedPort()
 		fmt.Println("Created: ", s.Name)
 	}
 	fmt.Println(shared.Done)
@@ -42,7 +42,7 @@ func Generate() {
 
 // Print credential as plain
 func Print() {
-	s := sypher.Sypher{}
+	s := procs.Sypher{}
 	if len(shared.CmdArgs()) > 0 {
 		s.Name = shared.CmdArgs()[0]
 	}
@@ -57,7 +57,7 @@ func Print() {
 
 // Edit credential in editor
 func Edit() {
-	s := sypher.Sypher{}
+	s := procs.Sypher{}
 	if len(shared.CmdArgs()) > 0 {
 		s.Name = shared.CmdArgs()[0]
 	}
@@ -80,7 +80,7 @@ func Edit() {
 	editorApp, err := exec.LookPath(shared.GetEditor())
 	utils.PanicWithError(err)
 
-	// Generate commander to open tempfile in editor
+	// Generate commander to open temp file in editor
 	cmd := exec.Command(editorApp, tempFile.Name())
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
