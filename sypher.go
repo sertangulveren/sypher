@@ -2,16 +2,11 @@ package sypher
 
 import (
 	"bytes"
-	"embed"
-	"fmt"
 	"github.com/sertangulveren/sypher/internal/shared"
 	"github.com/sertangulveren/sypher/internal/utils"
 	"os"
 	"path/filepath"
 )
-
-//go:embed sypher/*.enc
-var encryeptedCredentials embed.FS
 
 type Sypher struct {
 	Name  string
@@ -20,28 +15,32 @@ type Sypher struct {
 	Ready bool
 }
 
-func NewSypher() *Sypher {
+func newSypher() *Sypher {
 	return &Sypher{Name: shared.DefaultName}
 }
 
-func (s *Sypher) RootFilePath() string {
+func (s *Sypher) rootFilePath() string {
 	return filepath.Join(shared.WorkingDir(), shared.ContentDir, s.Name)
 }
 
 func (s *Sypher) FileName() string {
-	return s.RootFilePath() + ".enc"
+	return s.rootFilePath() + ".enc"
 }
 
-func (s *Sypher) EmbedPath() string {
-	return "sypher/" + s.Name + ".enc"
+func (s *Sypher) fsPath() string {
+	return s.Name + ".enc"
 }
 
-func (s *Sypher) KeyFileName() string {
-	return s.RootFilePath() + ".key"
+func (s *Sypher) keyFileName() string {
+	return s.rootFilePath() + ".key"
 }
 
-func (s *Sypher) ReadKeyFile() {
-	keyData, err := os.ReadFile(s.KeyFileName())
+func embedPortFileName() string {
+	return filepath.Join(shared.WorkingDir(), shared.ContentDir, "sypher.go")
+}
+
+func (s *Sypher) readKeyFile() {
+	keyData, err := os.ReadFile(s.keyFileName())
 	utils.ExitWithMessage(err, shared.CannotReadKeyFile)
 	s.Key = string(keyData)
 }
@@ -49,13 +48,13 @@ func (s *Sypher) ReadKeyFile() {
 func (s *Sypher) readEncryptedContent() []byte  {
 	encData, err := os.ReadFile(s.FileName())
 	if err == nil {
-		fmt.Println("sypher loaded the content from encrypted file")
+		// fmt.Println("sypher loaded the content from encrypted file")
 		return encData
 	}
 
-	encData, err = encryeptedCredentials.ReadFile(s.EmbedPath())
+	encData, err = fs.ReadFile(s.fsPath())
 	if err == nil {
-		fmt.Println("sypher loaded the content from embedded file")
+		// fmt.Println("sypher loaded the content from embedded file")
 		return encData
 	}
 	utils.ExitWithMessage(err, shared.CannotReadEncryptedFile)
@@ -81,14 +80,20 @@ func (s *Sypher) Write(value []byte) {
 	encrypted := utils.Encrypt(s.Key, value)
 	base64Data := utils.EncodeBase64(encrypted)
 
-	err := os.WriteFile(s.FileName(), base64Data, os.ModePerm)
+	err := os.WriteFile(s.FileName(), base64Data, 0644)
 	utils.PanicWithError(err)
 }
 
 func (s *Sypher) WriteKey() {
-	err := os.WriteFile(s.KeyFileName(), []byte(s.Key), os.ModePerm)
+	err := os.WriteFile(s.keyFileName(), []byte(s.Key), 0644)
 	utils.PanicWithError(err)
 }
+
+func WriteEmbedPort() {
+	err := os.WriteFile(embedPortFileName(), []byte(shared.EmbedPortContent), 0644)
+	utils.PanicWithError(err)
+}
+
 
 func (s *Sypher) Prepare() {
 	if s.Name == "" {
@@ -96,7 +101,7 @@ func (s *Sypher) Prepare() {
 	}
 	if s.Key == "" {
 		if s.Key = os.Getenv("SYPHER_MASTER_KEY"); s.Key == "" {
-			s.ReadKeyFile()
+			s.readKeyFile()
 		}
 	}
 
