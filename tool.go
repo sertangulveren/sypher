@@ -7,7 +7,7 @@ import (
 	"github.com/sertangulveren/sypher/internal/utils"
 )
 
-var Cred *procs.Sypher
+var cred *procs.Sypher
 
 var fs *embed.FS
 
@@ -23,22 +23,22 @@ func RegisterFS(projectFs *embed.FS) {
 // Load to make ready to use sypher
 func Load(config ...Config) {
 	if len(config) == 0 {
-		Cred = procs.NewSypher()
+		cred = procs.NewSypher()
 	} else {
 		cfg := config[0]
-		Cred = &procs.Sypher{
+		cred = &procs.Sypher{
 			Name: cfg.Name,
 			Key:  cfg.Key,
 		}
 	}
 
-	Cred.Prepare()
+	cred.Prepare()
 }
 
 // Get provides the string value of key
 func Get(configKey string) string {
-	if !Cred.Ready {
+	if !cred.Ready {
 		utils.PanicWithError(errors.New("sypher is not ready"))
 	}
-	return string(Cred.Data[configKey])
+	return string(cred.Data[configKey])
 }
