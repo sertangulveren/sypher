@@ -34,6 +34,7 @@ func Generate() {
 		}
 		s.Write([]byte(shared.DefaultContent))
 		s.WriteKey()
+		sypher.WriteEmbedPort()
 		fmt.Println("Created: ", s.Name)
 	}
 	fmt.Println(shared.Done)
