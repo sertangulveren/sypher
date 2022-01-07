@@ -9,15 +9,13 @@ import (
 
 var cred *procs.Sypher
 
-var fs *embed.FS
-
 type Config struct {
 	Name string
 	Key  string
 }
 
 func RegisterFS(projectFs *embed.FS) {
-	fs = projectFs
+	procs.FS = projectFs
 }
 
 // Load to make ready to use sypher
