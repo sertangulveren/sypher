@@ -7,7 +7,7 @@ sypher provides you to store your credentials and secrets as encrypted in your r
 ### Install the command line application:
 
 ```sh
-go get github.com/sertangulveren/sypher
+go get github.com/sertangulveren/sypher/sypher
 ```
 
 ### Generate credential(s):
